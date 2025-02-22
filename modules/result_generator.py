@@ -1,11 +1,16 @@
 from langchain.prompts import PromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate, ChatPromptTemplate
 
+import regex
+
 
 # Define system instructions for different analysis types
-SKILL_GAP_SYSTEM_INSTRUCTION = """You are an expert ATS system and career counselor with deep knowledge of various industries and job requirements. 
-Your task is to analyze resumes against job descriptions and provide a simple respone with skills, technology, or programming language in the following example format and dont add any output just one line:
-    skill gaps : Java, Jenkins, Terraform 
-Do not explain, justify, or have a conversation. Just provide the one-line response."""
+SKILL_GAP_SYSTEM_INSTRUCTION = """You are an AI designed to assist with resume and job description analysis to provide actionable insights for job seekers. Based on the provided user data, generate the following structured output:
+        
+    Skill Gap Analysis:
+    - Compare the skills in the user's resume with the skills required in the job description.
+    - Identify and list the matched skills (skills present in both the resume and job description).
+    - Identify and list the mismatched skills (skills required in the job description but missing in the resume).
+    - Important: If no job description is provided, do not generate any output for the skill gap analysis."""
 
 RESUME_OPTIMIZATION_SYSTEM_INSTRUCTION = """You are an expert ATS system and resume writer with extensive experience in optimizing resumes for automated screening systems.
 Your task is to analyze and suggest improvements while maintaining the resume's original structure and authenticity."""
@@ -20,7 +25,7 @@ You are an AI career assistant. Your responses should be direct and relevant to 
 
 Important instructions:
 1. Keep responses concise and focused on the user's specific question
-2. Only respond to the user's actual question do not create question on your own in respone, dont create any chain of thoughts
+2. Only respond to the user's actual question do not create question on your own in respone, don't create any chain of thoughts
 3. Answer only what is asked in minimal words 
 """
 COVER_LETTER_SYSTEM_INSTRUCTION = """You are an expert career assistant with experience in crafting professional cover letters tailored to specific job descriptions. 
@@ -42,26 +47,32 @@ def create_chat_prompt(system_instruction, human_template):
     human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
     return ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
 
-def process_skill_gaps_response(response):
-    """Extract the skill gaps line from the response"""
-    lines = response.split('\n')
-    for line in lines:
-        if line.lower().strip().startswith('skill gaps :'):
-            return line.strip()
-    return response.strip()
-
 def process_ats_score_response(response):
-    """Extract the ATS score line from the response"""
-    lines = response.split('\n')
-    for line in lines:
-        if line.lower().strip().startswith('ats score ='):
-            return line.strip()
-    return response.strip()
+    """Extracts an integer value from any XML-like tag in a string."""
+    pattern = r"<[^>]+>(\d+)%?</[^>]+>"  # Matches any tag with an integer inside
+    matches = regex.findall(pattern, response)
+    return [int(match) for match in matches] if matches else None
 
 def skill_gap_findings(job_description, resume_text, llm):
     try:
-        human_template = """Compare the following resume with the job description and list only the missing skills. 
-        Provide exactly one line starting with 'skill gaps : ' followed by comma-separated skills.
+        human_template = """ 
+        Generate a structured response based on the provided user data. The response should follow this format: 
+
+        1. Matched Skills:  
+        - List the skills present in both the resume and job description.  
+        - Present them in bullet points for clarity.  
+
+        2. Mismatched Skills:  
+        - Identify the skills required in the job description but missing from the resume.  
+        - Clearly list these skills in bullet points.  
+        - If no job description is provided, skip this section.  
+
+        3. Actionable Insights:  
+        - Provide personalized recommendations on how the job seeker can bridge the skill gap.  
+        - Suggest relevant courses, certifications, or projects to acquire the missing skills.  
+        - If applicable, highlight transferable skills that can compensate for any gaps.  
+
+        Ensure the output is structured, clear, and job-specific. Avoid generic responses, and focus on actionable guidance tailored to the candidate's profile.
         
         Resume: {resume_text}
         Job Description: {job_description}"""
@@ -71,7 +82,7 @@ def skill_gap_findings(job_description, resume_text, llm):
             job_description=job_description
         )
         response = llm.invoke(messages)
-        return process_skill_gaps_response(response)
+        return response.title()
     except Exception as e:
         raise Exception(f"Error in skill gap analysis: {str(e)}")
 
@@ -97,8 +108,23 @@ def optimize_resume(job_description, resume_text, llm):
 
 def ATS_calculation(job_description, resume_text, llm):
     try:
-        human_template = """Calculate the ATS compatibility score (0-100) for this resume.
-        Provide exactly one line in the format: ATS score = XX
+        human_template = """Output Prompt for ATS Score Generator  
+
+        Generate a structured ATS evaluation report based on the provided resume and job description. The output should follow this format and must enclosed the score within <SCORE>ATS SCORE</SCORE>.
+
+        1. ATS Score:  
+        - Provide a percentage-based score (0-100%) indicating the resume's compatibility with the job description. <SCORE>ATS SCORE</SCORE> 
+
+        2. Experience Match:  
+        - Assess whether the candidate's experience aligns with the job requirements.  
+        - Highlight any missing experience criteria.  
+
+        3. Formatting Compliance:  
+        - Check if the resume follows ATS-friendly formatting (e.g., no images, proper headings, standard fonts).  
+        - List any formatting issues that might reduce ATS readability.  
+
+        4. Actionable Suggestions:  
+        - Provide specific recommendations to improve the ATS score, such as adding missing keywords, adjusting formatting, or refining job descriptions within the resume.
         
         Resume: {resume_text}
         Job Description: {job_description}"""
@@ -109,7 +135,8 @@ def ATS_calculation(job_description, resume_text, llm):
             job_description=job_description
         )
         response = llm.invoke(messages)
-        return process_ats_score_response(response)
+        score = {"content":response, "value":process_ats_score_response(response)}
+        return score
     except Exception as e:
         raise Exception(f"Error in ATS calculation: {str(e)}")
     

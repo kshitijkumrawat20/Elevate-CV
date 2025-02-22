@@ -1,10 +1,15 @@
 import streamlit as st
 import time
 import uuid
+from modules.llm_connector import connect_llm
 
 
 if "user_id" not in st.session_state:
     st.session_state.user_id = {}
+    
+# Initialize and store LLM in session state
+if "llm" not in st.session_state:
+    st.session_state.llm = connect_llm()
     
 user = st.session_state.get("user_id", "user id not found")
 
