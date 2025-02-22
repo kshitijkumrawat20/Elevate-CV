@@ -1,6 +1,6 @@
 import streamlit as st
 from modules.llm_connector import connect_llm
-llm = connect_llm()
+from modules.result_generator import chat
 
 st.set_page_config(
     page_title="qna",
@@ -15,6 +15,8 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 if prompt := st.chat_input("What is up?"):
+    llm = connect_llm()
+    
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -30,7 +32,7 @@ if prompt := st.chat_input("What is up?"):
         try:
             # Since WatsonX doesn't support streaming by default (as per your connector),
             # we'll handle the response differently
-            response = llm.invoke(prompt)  # You might need to adjust this based on your LLM's API
+            response = chat(prompt, llm)  # You might need to adjust this based on your LLM's API
             st.markdown(response)
             
             # Add assistant response to chat history

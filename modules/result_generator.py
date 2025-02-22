@@ -1,5 +1,6 @@
 from langchain.prompts import PromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate, ChatPromptTemplate
 
+
 # Define system instructions for different analysis types
 SKILL_GAP_SYSTEM_INSTRUCTION = """You are an expert ATS system and career counselor with deep knowledge of various industries and job requirements. 
 Your task is to analyze resumes against job descriptions and provide a simple respone with skills, technology, or programming language in the following example format and dont add any output just one line:
@@ -13,6 +14,10 @@ ATS_ANALYSIS_SYSTEM_INSTRUCTION = """You are an advanced Applicant Tracking Syst
 Provide only a single line with the ATS score in exactly this format:
 ATS score = XX
 Do not explain or justify the score. Do not respond to follow-up questions."""
+
+CHAT_FEATURES = """
+You are an AI career assistant specializing in helping job seekers. You analyze user queries, resumes, and job descriptions to provide tailored career advice, job recommendations, resume improvements, and interview preparation tips. Ensure responses are professional, concise, and actionable. When required, extract key skills, experience, and qualifications from resumes and match them with job descriptions. Maintain an encouraging and supportive tone while offering data-driven insights.
+"""
 
 def create_chat_prompt(system_instruction, human_template):
     """Helper function to create chat prompts with system and human messages"""
@@ -90,3 +95,12 @@ def ATS_calculation(job_description, resume_text, llm):
         return process_ats_score_response(response)
     except Exception as e:
         raise Exception(f"Error in ATS calculation: {str(e)}")
+    
+def chat(text, llm):
+    try:
+        chat_prompt = create_chat_prompt(CHAT_FEATURES, text)
+        formatted_prompt = chat_prompt.format_messages()
+        response = llm.invoke(formatted_prompt)
+        return response
+    except Exception as e:
+        raise Exception(e)
