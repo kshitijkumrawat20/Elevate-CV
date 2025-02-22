@@ -23,7 +23,19 @@ Important instructions:
 2. Only respond to the user's actual question do not create question on your own in respone, dont create any chain of thoughts
 3. Answer only what is asked in minimal words 
 """
+COVER_LETTER_SYSTEM_INSTRUCTION = """You are an expert career assistant with experience in crafting professional cover letters tailored to specific job descriptions. 
+Your task is to generate a compelling and personalized cover letter based on the candidate’s resume and the job description. 
 
+Guidelines:
+1. Address the cover letter professionally.
+2. Tailor the content to align with the job description and highlight the candidate’s most relevant skills and experience.
+3. Maintain a formal and engaging tone.
+4. Structure it as follows:
+   - **Opening Paragraph**: Introduce the candidate and express enthusiasm for the role.
+   - **Middle Paragraph(s)**: Highlight key skills, achievements, and how they align with the job.
+   - **Closing Paragraph**: Express interest in an interview and gratitude for consideration.
+5. Keep the length concise (around 250-400 words).
+"""
 def create_chat_prompt(system_instruction, human_template):
     """Helper function to create chat prompts with system and human messages"""
     system_message_prompt = SystemMessagePromptTemplate.from_template(system_instruction)
@@ -109,3 +121,22 @@ def chat(text, llm):
         return response
     except Exception as e:
         raise Exception(e)
+    
+def generate_coverletter(job_description, resume_text, llm):
+    try:
+        human_template = """Generate a professional cover letter for the following job application, incorporating key skills and experiences from the resume.
+
+        Resume: {resume_text}
+        Job Description: {job_description}
+
+        Ensure the cover letter is well-structured, engaging, and tailored to the job role.
+        """
+        
+        chat_prompt = create_chat_prompt(COVER_LETTER_SYSTEM_INSTRUCTION, human_template)
+        messages = chat_prompt.format_messages(
+            resume_text=resume_text,
+            job_description=job_description
+        )
+        return llm.invoke(messages)
+    except Exception as e:
+        raise Exception(f"Error in cover letter generation: {str(e)}")
