@@ -51,7 +51,6 @@ if prompt := st.chat_input("What is up?"):
 
 # Add a button to clear conversation history
 if st.sidebar.button("Clear Conversation"):
-    st.write(st.session_state.messages)
     st.session_state.messages = []
     st.session_state.memory.clear()
     st.rerun()
