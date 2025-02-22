@@ -2,30 +2,24 @@ import streamlit as st
 import json
 import os
 
-
 st.set_page_config(
     page_title="user",
     initial_sidebar_state="collapsed"
 )
 
-
 # Directories
 UPLOAD_DIR = "uploads"
-DATA_FILE = "data/user_data.json"
 
 # Ensure directories exist
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    
+if "data_dict" not in st.session_state:
+    st.session_state.data_dict = []
+    
+user_id = st.session_state.get("user_id", "user id not found")
 
-# Load existing data
-if os.path.exists(DATA_FILE):
-    with open(DATA_FILE, "r") as f:
-        try:
-            user_data = json.load(f)
-        except json.JSONDecodeError:
-            user_data = []
-else:
-    user_data = []
+
+st.sidebar.write(st.session_state.data_dict)
 
 with st.form("user_data", border=False):
     user_name = st.text_input(" ", placeholder="John Deo", label_visibility="collapsed")
@@ -53,12 +47,15 @@ if submitted:
         new_entry = {
             "name": user_name,
             "role": job_role,
-            "file_name": new_filename,
+            "file_name": file_path,
             "job_description": job_description
         }
-        user_data.append(new_entry)
-
-        with open(DATA_FILE, "w") as f:
-            json.dump(user_data, f, indent=4)
+        # Ensure user_data is a dictionary to store per-user entries
+        if isinstance(st.session_state.data_dict, dict):
+            if user_id not in st.session_state.data_dict:
+                st.session_state.data_dict[user_id] = []  # Initialize list for user
+            st.session_state.data_dict[user_id].append(new_entry)
+        else:
+            st.session_state.data_dict = {user_id: [new_entry]}  # Initialize dict
 
         st.success("Resume and details saved successfully!")
