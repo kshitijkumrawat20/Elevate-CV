@@ -38,16 +38,17 @@ if prompt := st.chat_input("What is up?"):
 
     # Generate and display assistant response
     with st.chat_message("assistant"):
-        try:
-            # Get response using conversation chain with memory
-            response = st.session_state.conversation.predict(input=prompt)
-            st.markdown(response)
-            
-            # Add assistant response to chat history
-            st.session_state.messages.append({"role": "assistant", "content": response})
-            
-        except Exception as e:
-            st.error(f"Error generating response: {str(e)}")
+        with st.spinner("", show_time=True):
+            try:
+                # Get response using conversation chain with memory
+                response = st.session_state.conversation.predict(input=prompt)
+                st.markdown(response)
+                
+                # Add assistant response to chat history
+                st.session_state.messages.append({"role": "assistant", "content": response})
+                
+            except Exception as e:
+                st.error(f"Error generating response: {str(e)}")
 
 # Add a button to clear conversation history
 if st.sidebar.button("Clear Conversation"):
