@@ -1,10 +1,10 @@
 import streamlit as st
-import json
+import time
 import os
 
 st.set_page_config(
     page_title="user",
-    initial_sidebar_state="collapsed"
+    # initial_sidebar_state="collapsed"
 )
 
 # Directories
@@ -18,7 +18,6 @@ if "data_dict" not in st.session_state:
     
 user_id = st.session_state.get("user_id", "user id not found")
 
-
 st.sidebar.write(st.session_state.data_dict)
 
 with st.form("user_data", border=False):
@@ -28,7 +27,7 @@ with st.form("user_data", border=False):
     uploaded_resume = st.file_uploader(" ", label_visibility="visible", type=['PDF'], help="Upload your latest resume.")
     job_description = st.text_area(" ", placeholder="Type or Paste job description", label_visibility="collapsed")
     
-    submitted = st.form_submit_button("Save", type="tertiary", use_container_width=True)
+    submitted = st.form_submit_button("Proceed", type="tertiary", use_container_width=True)
 
 if submitted:
     if not user_name or not job_role or not uploaded_resume or not job_description:
@@ -52,10 +51,13 @@ if submitted:
         }
         # Ensure user_data is a dictionary to store per-user entries
         if isinstance(st.session_state.data_dict, dict):
-            if user_id not in st.session_state.data_dict:
-                st.session_state.data_dict[user_id] = []  # Initialize list for user
-            st.session_state.data_dict[user_id].append(new_entry)
+            if user_id['user_idd'] not in st.session_state.data_dict:
+                st.session_state.data_dict[user_id['user_idd']] = []  # Initialize list for user
+            st.session_state.data_dict[user_id['user_idd']].append(new_entry)
         else:
-            st.session_state.data_dict = {user_id: [new_entry]}  # Initialize dict
+            st.session_state.data_dict = {user_id['user_idd']: [new_entry]}  # Initialize dict
 
         st.success("Resume and details saved successfully!")
+        time.sleep(0.5)
+        
+        st.switch_page("pages/dashboard.py")
