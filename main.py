@@ -3,6 +3,10 @@ import time
 import uuid
 from modules.llm_connector import connect_llm
 
+st.set_page_config(page_title="Home", layout="centered", initial_sidebar_state="collapsed")
+
+st.markdown("<h1 style='text-align: left; font-size: 30px; color: orange; font-family: monospace; font-weight: bold;'>Login Here</h1>", unsafe_allow_html=True)
+
 
 if "user_id" not in st.session_state:
     st.session_state.user_id = {}

@@ -4,7 +4,8 @@ from modules.result_generator import chat, CHAT_FEATURES
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
-# from pages.dashboard import ATS_score, optimized_resume, skills_gaps
+from markdownlit import mdlit
+
 
 st.set_page_config(
     page_title="qna",
@@ -74,14 +75,14 @@ if "conversation" not in st.session_state:
 for message in st.session_state.messages:
     if message["role"] != "system":  # Don't display system message
         with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+            mdlit(message["content"])
 
 # Handle user input
 if prompt := st.chat_input("What is up?"):
     # Add user message to chat
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
-        st.markdown(prompt)
+        mdlit(prompt)
 
     # Generate and display assistant response
     with st.chat_message("assistant"):
@@ -89,7 +90,7 @@ if prompt := st.chat_input("What is up?"):
             try:
                 # Get response using conversation chain with memory
                 response = st.session_state.conversation.predict(input=prompt)
-                st.markdown(response)
+                mdlit(response)
                 
                 # Add assistant response to chat history
                 st.session_state.messages.append({"role": "assistant", "content": response})

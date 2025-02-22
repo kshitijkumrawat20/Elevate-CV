@@ -102,7 +102,8 @@ def optimize_resume(job_description, resume_text, llm):
             resume_text=resume_text,
             job_description=job_description
         )
-        return llm.invoke(messages)
+        response = llm.invoke(messages)
+        return response.title()
     except Exception as e:
         raise Exception(f"Error in resume optimization: {str(e)}")
 
