@@ -16,8 +16,8 @@ parameters = {
     "temperature": 0.7,
     "top_p": 0.7,
     "top_k": 50,
-    "max_new_tokens": 1000,  # Increase token limit for longer responses
-    "min_new_tokens": 50,    # Set minimum tokens to ensure complete responses
+    "max_new_tokens": 2000,  # Increase token limit for longer responses
+    "min_new_tokens": 0,    # Set minimum tokens to ensure complete responses
     "repetition_penalty": 1.1,
     "stop_sequences": ["\n\n\n"]  # Stop sequence to properly end responses
 }
@@ -26,11 +26,11 @@ parameters = {
 def connect_llm():
     try:
         watsonx_llm = WatsonxLLM(
-            # model_id="ibm/granite-13b-instruct-v2",
+            model_id="ibm/granite-3-8b-instruct",
             # model_id="ibm/granite-20b-multilingual",
             # model_id="ibm/granite-34b-code-instruct",
             
-            model_id="meta-llama/llama-3-3-70b-instruct",
+            # model_id="meta-llama/llama-3-3-70b-instruct",
             url="https://us-south.ml.cloud.ibm.com",
             project_id="4addd33f-df9c-4443-aa13-c4bb4d972357",
             params=parameters,
