@@ -4,6 +4,7 @@ from modules.result_generator import chat, CHAT_FEATURES
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
+# from pages.dashboard import ATS_score, optimized_resume, skills_gaps
 
 st.set_page_config(
     page_title="qna",
@@ -13,8 +14,27 @@ st.set_page_config(
 # Initialize session states
 if "messages" not in st.session_state:
     st.session_state.messages = []
-    # Add system message at initialization
-    st.session_state.messages.append({"role": "system", "content": CHAT_FEATURES})
+    
+    # Get analysis results from session state
+    skills_gaps = st.session_state.get('skills_gaps', 'Not available')
+    ats_score = st.session_state.get('ATS_score', 'Not available')
+    
+    # Create enhanced system message with analysis results
+    enhanced_context = f"""
+        {CHAT_FEATURES}
+
+        Analysis Results:
+        - Skills Gaps: {skills_gaps}
+        - ATS Score: {ats_score}
+
+        Instructions:
+        - Do NOT repeat the user's question.
+        - Only provide concise and helpful answers.
+        """
+
+    
+    # Add enhanced system message at initialization
+    st.session_state.messages.append({"role": "system", "content": enhanced_context})
 
 if "memory" not in st.session_state:
     st.session_state.memory = ConversationBufferMemory()
@@ -24,12 +44,19 @@ if "conversation" not in st.session_state:
     
     # Create a prompt template that includes the system message
     template = f"""
-    {CHAT_FEATURES}
-    
-    Current conversation:
-    {{history}}
-    Human: {{input}}
-    Assistant:"""
+        {CHAT_FEATURES}
+
+        Analysis Results:
+        - Skills Gaps: {st.session_state.get('skills_gaps', 'Not available')}
+        - ATS Score: {st.session_state.get('ATS_score', 'Not available')}
+
+        Current conversation:
+        {{history}}
+
+        Human: {{input}}
+        Assistant:
+        """
+
     
     prompt = PromptTemplate(
         input_variables=["history", "input"],

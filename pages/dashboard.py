@@ -45,6 +45,11 @@ with st.spinner(text="Generating..."):
     ATS_score = ATS_calculation(job_description=job_description, resume_text=resume_text, llm=llm)
     optimized_resume = optimize_resume(job_description=job_description, resume_text=resume_text, llm=llm)
     
+    # Store results in session state
+    st.session_state.skills_gaps = skills_gaps
+    st.session_state.ATS_score = ATS_score
+    st.session_state.optimized_resume = optimized_resume
+    
     st.markdown(skills_gaps)
     st.markdown(ATS_score)
     st.markdown(optimized_resume)
