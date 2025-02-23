@@ -1,11 +1,11 @@
-# PrepAI - AI-Powered Career Preparation Assistant 🚀
+# ElevateCV - AI-Powered Career Preparation Assistant 🚀
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://resumehack.streamlit.app/)
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat&logo=github&logoColor=white)](https://github.com/datasciritwik/prepai)
 
 ## Overview
 
-PrepAI is an intelligent career preparation assistant that helps job seekers optimize their resumes, analyze skill gaps, and improve their job application materials using advanced AI technology.
+ElevateCV is an intelligent career preparation assistant that helps job seekers optimize their resumes, analyze skill gaps, and improve their job application materials using advanced AI technology.
 
 ## Features 🌟
 
@@ -124,7 +124,7 @@ prepai/
 
 ## Live Demo 🌐
 
-Try PrepAI now at [https://prepai.streamlit.app](https://resumehack.streamlit.app/)
+Try ElevateCV now at [https://prepai.streamlit.app](https://resumehack.streamlit.app/)
 
 ## Contributing 🤝
 
