@@ -47,6 +47,12 @@ Guidelines:
    - **Closing Paragraph**: Express interest in an interview and gratitude for consideration.
 5. Keep the length concise (around 250-400 words).
 """
+
+def extract_optimized_resume(text):
+    match = regex.search(r'Optimized Resume:\s*(.*)', text, regex.DOTALL)
+    return match.group(1).strip() if match else None
+
+
 def create_chat_prompt(system_instruction, human_template):
     """Helper function to create chat prompts with system and human messages"""
     system_message_prompt = SystemMessagePromptTemplate.from_template(system_instruction)

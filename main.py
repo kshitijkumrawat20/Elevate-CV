@@ -5,15 +5,14 @@ from modules.llm_connector import connect_llm
 
 st.set_page_config(page_title="Home", layout="centered", initial_sidebar_state="collapsed")
 
-st.markdown("<h1 style='text-align: left; font-size: 30px; color: orange; font-family: monospace; font-weight: bold;'>Login Here</h1>", unsafe_allow_html=True)
-
-
-if "user_id" not in st.session_state:
-    st.session_state.user_id = {}
-    
 # Initialize and store LLM in session state
 if "llm" not in st.session_state:
     st.session_state.llm = connect_llm()
+    
+st.markdown("<h1 style='text-align: left; font-size: 30px; color: orange; font-family: monospace; font-weight: bold;'>Login Here</h1>", unsafe_allow_html=True)
+
+if "user_id" not in st.session_state:
+    st.session_state.user_id = {}
     
 user = st.session_state.get("user_id", "user id not found")
 
@@ -35,7 +34,5 @@ if submitted:
             "userpass":password,
             "user_idd":unique_id,
         }
-        
-    st.toast("created")
-    
+            
     st.switch_page("pages/user.py")

@@ -4,7 +4,7 @@ import os
 
 st.set_page_config(
     page_title="user",
-    # initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed"
 )
 
 # Directories
@@ -55,7 +55,7 @@ if submitted:
         else:
             st.session_state.data_dict[user_id['user_idd']].update(new_entry)  # Update existing user entry
 
-        st.success("Resume and details saved successfully!")
+        st.toast("Resume and details saved successfully!", icon="🎉")
         time.sleep(0.5)
         
         st.switch_page("pages/dashboard.py")
