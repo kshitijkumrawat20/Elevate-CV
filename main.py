@@ -1,5 +1,5 @@
 import streamlit as st
-import time
+from streamlit_extras.add_vertical_space import add_vertical_space
 import uuid
 from modules.llm_connector import connect_llm
 
@@ -11,9 +11,20 @@ st.markdown("""
             footer {visibility:hidden;}
             </style>
             """, unsafe_allow_html=True)
-# Initialize and store LLM in session state
-if "llm" not in st.session_state:
-    st.session_state.llm = connect_llm()
+st.markdown("<h1 style='text-align: center; font-size: 40px; color: orange; font-family: monospace; font-weight: bold;'>Welcome to ElevateCV</h1>", unsafe_allow_html=True)
+hide_img_fs = '''
+<style>
+button[title="View fullscreen"]{
+    visibility: hidden;}
+</style>
+'''
+st.html("<style>[data-testid='stHeaderActionElements'] {display: none;}</style>")
+
+st.markdown(hide_img_fs, unsafe_allow_html=True)
+with st.spinner("Configuring ...", show_time=True):
+    # Initialize and store LLM in session state
+    if "llm" not in st.session_state:
+        st.session_state.llm = connect_llm()
     
 st.markdown("<h1 style='text-align: left; font-size: 30px; color: orange; font-family: monospace; font-weight: bold;'>Login Here</h1>", unsafe_allow_html=True)
 
@@ -42,3 +53,11 @@ if submitted:
         }
             
     st.switch_page("pages/user.py")
+    
+add_vertical_space(7)
+st.divider()
+c1, c2, _, _, _ = st.columns(5)
+c1.markdown("AI Powered by IMB Granite Models")
+c1.image("logo/ibm.png", width=100)
+c2.markdown("Hackathon organized by")
+c2.image("logo/lablab.png", width=100)

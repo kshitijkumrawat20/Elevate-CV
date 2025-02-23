@@ -12,7 +12,15 @@ st.markdown("""
             footer {visibility:hidden;}
             </style>
             """, unsafe_allow_html=True)
+hide_img_fs = '''
+<style>
+button[title="View fullscreen"]{
+    visibility: hidden;}
+</style>
+'''
+st.html("<style>[data-testid='stHeaderActionElements'] {display: none;}</style>")
 
+st.markdown(hide_img_fs, unsafe_allow_html=True)
 # Directories
 UPLOAD_DIR = "uploads"
 
