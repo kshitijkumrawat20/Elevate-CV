@@ -101,18 +101,38 @@ if "ATS_score_content" not in st.session_state:
     st.session_state.ATS_score_content = None
     
 if st.session_state.ATS_score_content:
-    mdlit(st.session_state.ATS_score_content.title())  # Print stored result
+    mdlit(st.session_state.ATS_score_content)
 else:
     with st.spinner("Calculating ATS Score..."):
-        if job_description and resume_text:  # Ensure inputs are provided
-            _ats_score = ATS_calculation(job_description=job_description, resume_text=resume_text, llm=llm)
-            # st.write(_ats_score)
-            if _ats_score:
-                st.session_state.ATS_score_content = _ats_score['content']
-                st.session_state.ATS_score = _ats_score['value'][0]
-                mdlit(_ats_score['content'].title())
-            else:
-                st.warning("Can't generate score. Please check the provided resume and job description.")
+        if job_description and resume_text:
+            try:
+                _ats_score = ATS_calculation(job_description=job_description, resume_text=resume_text, llm=llm)
+                
+                if isinstance(_ats_score, dict):
+                    # Extract score from content if value is not present
+                    if 'content' in _ats_score:
+                        st.session_state.ATS_score_content = _ats_score['content']
+                        # Try to extract numeric score from content
+                        try:
+                            # Assuming score is mentioned in the content
+                            score_text = _ats_score['content']
+                            # Extract numeric value (assuming it's mentioned as a percentage)
+                            import re
+                            score_match = re.search(r'(\d+)%', score_text)
+                            if score_match:
+                                st.session_state.ATS_score = int(score_match.group(1))
+                            else:
+                                st.session_state.ATS_score = 0  # Default score if not found
+                        except:
+                            st.session_state.ATS_score = 0  # Default score if extraction fails
+                        
+                        mdlit(_ats_score['content'])
+                    else:
+                        st.warning("Unexpected response format from ATS calculation")
+                else:
+                    st.warning("Invalid response from ATS calculation")
+            except Exception as e:
+                st.error(f"Error calculating ATS score: {str(e)}")
         else:
             st.error("Missing job description or resume. Please provide both for generating scores")
     
