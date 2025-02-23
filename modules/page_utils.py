@@ -59,11 +59,16 @@ def refresh(file):
     clicked = st.button("🔄 Re-upload", key="refresh_button")
 
     if clicked:
-        os.remove(file)
-        lkeys = ['data_dict', 'skills_gaps', 'ATS_score', 'ATS_score_content', 'optz_resume', 'optz_cover', 'messages', 'memory', 'conversation', ]
-        for key in lkeys:
-            if key not in ['llm', 'user_id']:
-                del st.session_state[key]
-        
+        try:
+            os.remove(file)
+        except:
+            pass
+        try:
+            lkeys = ['data_dict', 'skills_gaps', 'ATS_score', 'ATS_score_content', 'optz_resume', 'optz_cover', 'messages', 'memory', 'conversation', ]
+            for key in lkeys:
+                if key not in ['llm', 'user_id']:
+                    del st.session_state[key]
+        except:
+            pass
         # Redirect after clearing session state
         st.switch_page("pages/user.py")  # Ensure this page exists
