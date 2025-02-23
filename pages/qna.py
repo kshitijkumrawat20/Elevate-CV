@@ -5,12 +5,16 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
 from markdownlit import mdlit
+from modules.page_utils import add_logout_button
 
 
 st.set_page_config(
     page_title="qna",
     # initial_sidebar_state="collapsed"
 )
+
+# Add near the top of the page after the st.set_page_config
+add_logout_button()
 
 # Initialize session states
 if "messages" not in st.session_state:

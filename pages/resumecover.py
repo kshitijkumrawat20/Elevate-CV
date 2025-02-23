@@ -5,12 +5,16 @@ from markdownlit import mdlit
 from modules.result_generator import generate_coverletter, optimize_resume
 from streamlit_extras.add_vertical_space import add_vertical_space
 from toggle_button_set import toggle_button_set
+from modules.page_utils import add_logout_button
 
 st.set_page_config(
     page_title="Resume Optimization",
     initial_sidebar_state="collapsed",
     layout="centered"
 )
+
+# Add logout button
+add_logout_button()
 
 # Hide fullscreen button and unnecessary elements
 st.markdown(
