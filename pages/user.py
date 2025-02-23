@@ -14,7 +14,7 @@ UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
     
 if "data_dict" not in st.session_state:
-    st.session_state.data_dict = []
+    st.session_state.data_dict = {}
     
 user_id = st.session_state.get("user_id", "user id not found")
 
@@ -49,13 +49,11 @@ if submitted:
             "file_name": file_path,
             "job_description": job_description
         }
-        # Ensure user_data is a dictionary to store per-user entries
-        if isinstance(st.session_state.data_dict, dict):
-            if user_id['user_idd'] not in st.session_state.data_dict:
-                st.session_state.data_dict[user_id['user_idd']] = []  # Initialize list for user
-            st.session_state.data_dict[user_id['user_idd']].append(new_entry)
+        # Ensure user_data is stored as a dictionary
+        if user_id['user_idd'] not in st.session_state.data_dict:
+            st.session_state.data_dict[user_id['user_idd']] = new_entry  # Store single entry per user
         else:
-            st.session_state.data_dict = {user_id['user_idd']: [new_entry]}  # Initialize dict
+            st.session_state.data_dict[user_id['user_idd']].update(new_entry)  # Update existing user entry
 
         st.success("Resume and details saved successfully!")
         time.sleep(0.5)

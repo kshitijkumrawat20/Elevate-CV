@@ -17,7 +17,7 @@ Your task is to analyze and suggest improvements while maintaining the resume's 
 
 ATS_ANALYSIS_SYSTEM_INSTRUCTION = """You are an advanced Applicant Tracking System (ATS) with deep understanding of how ATS software analyzes resumes.
 Provide only a single line with the ATS score in exactly this format:
-ATS score = XX
+<SCORE>ATS SCORE</SCORE> 
 Do not explain or justify the score. Do not respond to follow-up questions."""
 
 CHAT_FEATURES = """

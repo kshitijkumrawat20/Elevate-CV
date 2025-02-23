@@ -50,8 +50,8 @@ user_datas = st.session_state.get("data_dict", "user id not found")
 llm = st.session_state.get("llm", "Instance Not Found")
 
 # st.write(user_id['user_idd'])
-job_description = user_datas[user_id['user_idd']][0]['job_description']
-resume_path = user_datas[user_id['user_idd']][0]['file_name']
+job_description = user_datas[user_id['user_idd']]['job_description']
+resume_path = user_datas[user_id['user_idd']]['file_name']
 
 resume_text = load_resume(resume_path)
 
@@ -107,6 +107,7 @@ else:
     with st.spinner("Calculating ATS Score..."):
         if job_description and resume_text:  # Ensure inputs are provided
             _ats_score = ATS_calculation(job_description=job_description, resume_text=resume_text, llm=llm)
+            st.write(_ats_score)
             if _ats_score:
                 st.session_state.ATS_score_content = _ats_score['content']
                 st.session_state.ATS_score = _ats_score['value'][0]
@@ -118,13 +119,3 @@ else:
     
 if st.session_state.ATS_score != 0:
     plot_ats_donut(st.session_state.ATS_score)
-
-
-
-# add_vertical_space(1)
-
-set4, set5, set6 = st.columns([3,10,3])
-
-
-  
-# with set5:  
