@@ -31,7 +31,7 @@ if "data_dict" not in st.session_state:
 user_id = st.session_state.get("user_id", "user id not found")
 
 if st.sidebar.button("Delete All Files", type="primary"):
-    if user_id == "@ritwik":
+    if user_id['username'] == "@ritwik":
         delete_uploaded_files()
     else:
         st.sidebar.warning("You don't have admin rights", icon="🚨")
