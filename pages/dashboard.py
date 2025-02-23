@@ -1,6 +1,5 @@
 import streamlit as st
 from streamlit_extras.add_vertical_space import add_vertical_space
-from streamlit_extras.app_logo import add_logo
 from markdownlit import mdlit
 
 
@@ -107,7 +106,7 @@ else:
     with st.spinner("Calculating ATS Score..."):
         if job_description and resume_text:  # Ensure inputs are provided
             _ats_score = ATS_calculation(job_description=job_description, resume_text=resume_text, llm=llm)
-            st.write(_ats_score)
+            # st.write(_ats_score)
             if _ats_score:
                 st.session_state.ATS_score_content = _ats_score['content']
                 st.session_state.ATS_score = _ats_score['value'][0]

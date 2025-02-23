@@ -13,7 +13,13 @@ SKILL_GAP_SYSTEM_INSTRUCTION = """You are an AI designed to assist with resume a
     - Important: If no job description is provided, do not generate any output for the skill gap analysis."""
 
 RESUME_OPTIMIZATION_SYSTEM_INSTRUCTION = """You are an expert ATS system and resume writer with extensive experience in optimizing resumes for automated screening systems.
-Your task is to analyze and suggest improvements while maintaining the resume's original structure and authenticity."""
+Your task is to analyze and suggest improvements while maintaining the resume's original structure and authenticity.
+    - Focus only on relevant skills and experience related to the job description.
+    - Do not include generic statements or unrelated industries.
+    - Keep the resume format intact (Name, Contact, Skills, Experience, Projects).
+    - Use bullet points where applicable.
+    - Do not add unnecessary information like open-source contributions unless relevant.
+"""
 
 ATS_ANALYSIS_SYSTEM_INSTRUCTION = """You are an advanced Applicant Tracking System (ATS) with deep understanding of how ATS software analyzes resumes.
 Provide only a single line with the ATS score in exactly this format:
