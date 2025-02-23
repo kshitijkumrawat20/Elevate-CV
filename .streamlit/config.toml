@@ -2,3 +2,9 @@
 base="dark"
 primaryColor="#ffa500"
 secondaryBackgroundColor="#282a3d"
+
+[browser]
+showSidebarNavigation = false
+
+[ui]
+hideTopBar = false

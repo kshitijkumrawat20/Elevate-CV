@@ -15,6 +15,12 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+            <style>
+            #MainMenu {visibility:hidden;}
+            footer {visibility:hidden;}
+            </style>
+            """, unsafe_allow_html=True)
 hide_img_fs = '''
 <style>
 button[title="View fullscreen"]{
@@ -45,21 +51,27 @@ def plot_ats_donut(ats_score):
     # Display in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
-user_id = st.session_state.get("user_id", "user id not found")
-user_datas = st.session_state.get("data_dict", "user id not found")
-llm = st.session_state.get("llm", "Instance Not Found")
+try:
+    user_id = st.session_state.get("user_id", "user id not found")
+    user_datas = st.session_state.get("data_dict", "user id not found")
+    llm = st.session_state.get("llm", "Instance Not Found")
+except:
+    st.switch_page("/")
+    
+try:
+    # st.write(user_id['user_idd'])
+    job_description = user_datas[user_id['user_idd']]['job_description']
+    resume_path = user_datas[user_id['user_idd']]['file_name']
 
-# st.write(user_id['user_idd'])
-job_description = user_datas[user_id['user_idd']]['job_description']
-resume_path = user_datas[user_id['user_idd']]['file_name']
-
-resume_text = load_resume(resume_path)
+    resume_text = load_resume(resume_path)
+except:
+    st.switch_page("pages/user.py")
 
 
 set1, set2, set3 = st.columns([4,10,4])
 # set3.image("pages/image.png", width=60)
 with set3:
-    refresh()
+    refresh(resume_path)
         
 with set2:
     col1, col2 = st.columns(2, gap="medium")

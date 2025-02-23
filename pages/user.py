@@ -1,24 +1,40 @@
 import streamlit as st
 import time
-import os
-
+import os, glob
 st.set_page_config(
     page_title="user",
     initial_sidebar_state="collapsed"
 )
+
+st.markdown("""
+            <style>
+            #MainMenu {visibility:hidden;}
+            footer {visibility:hidden;}
+            </style>
+            """, unsafe_allow_html=True)
 
 # Directories
 UPLOAD_DIR = "uploads"
 
 # Ensure directories exist
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# Delete all uploaded files when the button is clicked
+def delete_uploaded_files():
+    for file_path in glob.glob(os.path.join(UPLOAD_DIR, "*")):
+        os.remove(file_path)
+    st.toast("All uploaded files have been deleted!", icon="🗑️")
     
 if "data_dict" not in st.session_state:
     st.session_state.data_dict = {}
     
 user_id = st.session_state.get("user_id", "user id not found")
 
-st.sidebar.write(st.session_state.data_dict)
+if st.sidebar.button("Delete All Files", type="primary"):
+    if user_id == "@ritwik":
+        delete_uploaded_files()
+    else:
+        st.sidebar.warning("You don't have admin rights", icon="🚨")
 
 with st.form("user_data", border=False):
     user_name = st.text_input(" ", placeholder="John Deo", label_visibility="collapsed")
@@ -26,7 +42,6 @@ with st.form("user_data", border=False):
     
     uploaded_resume = st.file_uploader(" ", label_visibility="visible", type=['PDF'], help="Upload your latest resume.")
     job_description = st.text_area(" ", placeholder="Type or Paste job description", label_visibility="collapsed")
-    
     submitted = st.form_submit_button("Proceed", type="tertiary", use_container_width=True)
 
 if submitted:

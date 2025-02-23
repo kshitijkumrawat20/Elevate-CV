@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 def logout():
     # Clear all session state
@@ -18,7 +19,7 @@ def header():
         if b.button("Logout", use_container_width=True, type="tertiary"):
             logout()
             
-def refresh():
+def refresh(file):
     # Define button style to match UI color
     button_style = """
         <style>
@@ -58,6 +59,7 @@ def refresh():
     clicked = st.button("🔄 Re-upload", key="refresh_button")
 
     if clicked:
+        os.remove(file)
         lkeys = ['data_dict', 'skills_gaps', 'ATS_score', 'ATS_score_content', 'optz_resume', 'optz_cover', 'messages', 'memory', 'conversation', ]
         for key in lkeys:
             if key not in ['llm', 'user_id']:

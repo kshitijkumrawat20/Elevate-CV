@@ -5,6 +5,12 @@ from modules.llm_connector import connect_llm
 
 st.set_page_config(page_title="Home", layout="centered", initial_sidebar_state="collapsed")
 
+st.markdown("""
+            <style>
+            #MainMenu {visibility:hidden;}
+            footer {visibility:hidden;}
+            </style>
+            """, unsafe_allow_html=True)
 # Initialize and store LLM in session state
 if "llm" not in st.session_state:
     st.session_state.llm = connect_llm()

@@ -13,7 +13,12 @@ st.set_page_config(
     layout="centered"
 )
 header()
-
+st.markdown("""
+            <style>
+            #MainMenu {visibility:hidden;}
+            footer {visibility:hidden;}
+            </style>
+            """, unsafe_allow_html=True)
 # Hide fullscreen button and unnecessary elements
 st.markdown(
     '''
