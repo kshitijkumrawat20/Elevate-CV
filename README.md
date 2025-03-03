@@ -1,6 +1,6 @@
 # ElevateCV - AI-Powered Career Preparation Assistant 🚀
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://resumehack.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://elevatecv.streamlit.app/user)
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat&logo=github&logoColor=white)](https://github.com/datasciritwik/prepai)
 
 ## Overview
@@ -124,7 +124,7 @@ prepai/
 
 ## Live Demo 🌐
 
-Try ElevateCV now at [https://prepai.streamlit.app](https://resumehack.streamlit.app/)
+Try ElevateCV now at [https://prepai.streamlit.app](https://elevatecv.streamlit.app/user)
 
 ## Contributing 🤝
 
