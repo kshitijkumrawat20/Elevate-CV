@@ -148,7 +148,7 @@ def ATS_calculation(job_description, resume_text, llm):
             job_description=job_description
         )
         response = llm.invoke(messages)
-        score = {"content":response, "value":process_ats_score_response(response)}
+        score = {"content":response.content, "value":process_ats_score_response(response.content)}
         return score
     except Exception as e:
         raise Exception(f"Error in ATS calculation: {str(e)}")
@@ -158,7 +158,7 @@ def chat(text, llm):
         chat_prompt = create_chat_prompt(CHAT_FEATURES, text)
         formatted_prompt = chat_prompt.format_messages()
         response = llm.invoke(formatted_prompt)
-        return response
+        return response.content
     except Exception as e:
         raise Exception(e)
     
@@ -177,6 +177,6 @@ def generate_coverletter(job_description, resume_text, llm):
             resume_text=resume_text,
             job_description=job_description
         )
-        return llm.invoke(messages)
+        return llm.invoke(messages.content)
     except Exception as e:
         raise Exception(f"Error in cover letter generation: {str(e)}")
