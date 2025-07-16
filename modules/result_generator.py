@@ -94,7 +94,7 @@ def skill_gap_findings(job_description, resume_text, llm):
             job_description=job_description
         )
         response = llm.invoke(messages)
-        return response.title()
+        return response.content
     except Exception as e:
         raise Exception(f"Error in skill gap analysis: {str(e)}")
 
@@ -115,7 +115,7 @@ def optimize_resume(job_description, resume_text, llm):
             job_description=job_description
         )
         response = llm.invoke(messages)
-        return response.title()
+        return response.content
     except Exception as e:
         raise Exception(f"Error in resume optimization: {str(e)}")
 
